@@ -146,8 +146,8 @@ module Faraday
       self.port        = uri.port
       self.path_prefix = uri.path
 
-      if uri.query && !uri.query.empty?
-        merge_params @params, parse_query(uri.query)
+      unless uri.query.blank?
+        merge_params(@params, parse_query(uri.query))
       end
 
       if uri.user && uri.password
@@ -161,16 +161,17 @@ module Faraday
         value.chomp!  "/"
         value.replace "/#{value}" if value !~ /^\//
       end
+
       @path_prefix = value
     end
 
-    # return the assembled Rack application for this instance.
+    # Return the assembled Rack application for this instance.
     def to_app
       @builder.to_app
     end
 
     def run_request(method, url, body, headers)
-      if !METHODS.include?(method)
+      unless METHODS.include?(method)
         raise ArgumentError, "unknown http method: #{method}"
       end
 
@@ -178,7 +179,7 @@ module Faraday
         req.url(url)                if url
         req.headers.update(headers) if headers
         req.body = body             if body
-        yield req if block_given?
+        yield(req) if block_given?
       end
     end
 
@@ -194,14 +195,17 @@ module Faraday
     #   conn.build_url("nigiri", :page => 2) # => https://sushi.com/api/nigiri?token=abc&page=2
     #
     def build_url(url, params = nil)
-      uri          = URI.parse(url.to_s)
+      uri = URI.parse(url.to_s)
+
       if @path_prefix && uri.path !~ /^\//
         uri.path = "#{@path_prefix.size > 1 ? @path_prefix : nil}/#{uri.path}"
       end
+
       uri.host   ||= @host
       uri.port   ||= @port
       uri.scheme ||= @scheme
       replace_query(uri, params)
+
       uri
     end
 
