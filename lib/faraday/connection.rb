@@ -215,12 +215,15 @@ module Faraday
 
     def replace_query(uri, params)
       url_params = @params.dup
-      if uri.query && !uri.query.empty?
+
+      unless uri.query.blank?
         merge_params(url_params, parse_query(uri.query))
       end
-      if params && !params.empty?
+
+      unless params.blank?
         merge_params(url_params, params)
       end
+
       uri.query = url_params.empty? ? nil : build_query(url_params)
       uri
     end
