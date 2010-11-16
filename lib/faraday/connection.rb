@@ -224,7 +224,7 @@ module Faraday
         merge_params(url_params, params)
       end
 
-      uri.query = url_params.empty? ? nil : build_query(url_params)
+      uri.query = url_params.empty? ? nil : url_params.to_param(:escape => true)#build_query(url_params)
       uri
     end
 

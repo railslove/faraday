@@ -1,4 +1,5 @@
 require 'rack/utils'
+
 module Faraday
   module Utils
     include Rack::Utils
