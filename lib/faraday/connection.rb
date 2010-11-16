@@ -4,7 +4,8 @@ require 'base64'
 
 module Faraday
   class Connection
-    include Addressable, Faraday::Utils
+    include Addressable
+    include Faraday::Utils
 
     METHODS = Set.new [:get, :post, :put, :delete, :head]
     METHODS_WITH_BODIES = Set.new [:post, :put]
@@ -22,11 +23,13 @@ module Faraday
         options = url
         url     = options[:url]
       end
+
       @headers          = HeaderHash.new
       @params           = {}
       @options          = options[:request] || {}
       @ssl              = options[:ssl]     || {}
       @parallel_manager = options[:parallel]
+
       self.url_prefix = url if url
       proxy(options[:proxy])
       merge_params  @params,  options[:params]  if options[:params]
@@ -60,6 +63,7 @@ module Faraday
       @builder.build(options, &block)
     end
 
+    ## Requests
     def get(url = nil, headers = nil, &block)
       run_request(:get, url, nil, headers, &block)
     end
@@ -141,9 +145,11 @@ module Faraday
       self.host        = uri.host
       self.port        = uri.port
       self.path_prefix = uri.path
+
       if uri.query && !uri.query.empty?
         merge_params @params, parse_query(uri.query)
       end
+
       if uri.user && uri.password
         basic_auth(uri.user, uri.password)
       end

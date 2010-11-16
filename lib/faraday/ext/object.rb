@@ -14,4 +14,8 @@ class Object
     yield self
     self
   end unless Object.respond_to?(:tap)
+
+  def blank?
+    respond_to?(:empty?) ? empty? : !self
+  end
 end
