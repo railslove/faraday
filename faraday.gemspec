@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.version           = '0.5.3'
   s.date              = '2010-11-09'
   s.rubyforge_project = 'faraday'
+  s.platform          = Gem::Platform::RUBY
 
   ## Make sure your summary is short. The description may be as long
   ## as you like.
@@ -37,53 +38,11 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('multipart-post', '~> 1.0.1')
   s.add_runtime_dependency('rack', ['>= 1.1.0', "< 2"])
 
-  ## Leave this section as-is. It will be automatically generated from the
-  ## contents of your Git repository via the gemspec task. DO NOT REMOVE
-  ## THE MANIFEST COMMENTS, they are used as delimiters by the task.
-  # = MANIFEST =
-  s.files = %w[
-    Gemfile
-    Gemfile.lock
-    LICENSE
-    README.md
-    Rakefile
-    faraday.gemspec
-    lib/faraday.rb
-    lib/faraday/adapter.rb
-    lib/faraday/adapter/action_dispatch.rb
-    lib/faraday/adapter/em_synchrony.rb
-    lib/faraday/adapter/net_http.rb
-    lib/faraday/adapter/patron.rb
-    lib/faraday/adapter/test.rb
-    lib/faraday/adapter/typhoeus.rb
-    lib/faraday/builder.rb
-    lib/faraday/connection.rb
-    lib/faraday/error.rb
-    lib/faraday/middleware.rb
-    lib/faraday/request.rb
-    lib/faraday/request/active_support_json.rb
-    lib/faraday/request/yajl.rb
-    lib/faraday/response.rb
-    lib/faraday/response/active_support_json.rb
-    lib/faraday/response/yajl.rb
-    lib/faraday/upload_io.rb
-    lib/faraday/utils.rb
-    test/adapters/live_test.rb
-    test/adapters/test_middleware_test.rb
-    test/adapters/typhoeus_test.rb
-    test/connection_app_test.rb
-    test/connection_test.rb
-    test/env_test.rb
-    test/form_post_test.rb
-    test/helper.rb
-    test/live_server.rb
-    test/multipart_test.rb
-    test/request_middleware_test.rb
-    test/response_middleware_test.rb
-  ]
-  # = MANIFEST =
+  s.add_development_dependency "rspec", "~> 2.1.0"
+  s.add_development_dependency "webmock", "~> 1.6.1"
 
-  ## Test files will be grabbed from the file list. Make sure the path glob
-  ## matches what you actually use.
-  s.test_files = s.files.select { |path| path =~ /^test\/.*_test\.rb/ }
+  s.files         = `git ls-files`.split("\n")
+  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
+  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  s.require_paths = ["lib"]
 end
